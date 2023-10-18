@@ -1,21 +1,22 @@
 FROM node:16.13.2-alpine AS BUILD
 
-RUN apk add --no-cache python3 make g++ 
-  
+RUN apk add --no-cache python3 make g++       
+
 WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile 
+RUN yarn install --frozen-lockfile
 
 COPY . ./
 
-RUN yarn build 
-
+RUN yarn build
 
 
 
 FROM node:16.13.2-alpine
+
+ENV PORT=80
 
 WORKDIR /app
 
@@ -25,4 +26,4 @@ RUN rm dist/conf.yml
 
 CMD [ "yarn", "start" ]
 
-EXPOSE 80
+EXPOSE ${PORT}
